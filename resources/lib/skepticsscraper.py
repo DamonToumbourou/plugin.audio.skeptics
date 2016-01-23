@@ -59,7 +59,9 @@ def get_podcast_content(url):
     content = soup.find('div', {'class': 'podcast-detail'})
 
     title = content.find('h1').get_text()
-    print title
+    
+    img = content.find('div', {'class': 'podcast-image'})
+    img = img.find('img').get('src')
 
     specific_content = soup.find_all('div', {'class': 'podcast-segment'})
 
@@ -70,24 +72,14 @@ def get_podcast_content(url):
 
         if """What's the Word""" in find_word:
             word = i.find('span', {'class': 'podcast-item-value'}).get_text()
-            print word 
-        """
-        if "News Items" in find_word:
-            items = i.find_all('li')
-            for k in items:
-                label = k.find('span', {'class': 'podcast-item-label'}).get_text()
-                value = k.find('span', {'class': 'podcast-item-value'}).get_text()
-                
-                items = {
-                    'label': label,
-                    'value': value,
-                }
-                news_items.append(items)
-
-        """
+        if "Skeptical Quote of the Week" in find_word:
+            quote = i.find('span', {'class': 'podcast-item-value'}).get_text()
+    
     items = {
         'title': title,
-        'word': word,  
+        'img': img,
+        'word': word,
+        'quote': quote,
     }
 
     output.append(items)
@@ -109,16 +101,14 @@ def get_news_items(url):
             for k in items:
                 news_label = k.find('span', {'class': 'podcast-item-label'}).get_text()
                 news_link = k.find('span', {'class': 'podcast-item-value'}).get_text()
-                print 'label: '
-                print news_label
-                print 'link: '
-                print news_link
+                
                 items = {
                     'news_label': news_label,
                     'news_link': news_link,
                 }
 
                 news_items.append(items)
+    print news_items            
 
     return news_items
-get_news_items('http://www.theskepticsguide.org/podcast/sgu/549')
+#get_news_items('http://www.theskepticsguide.org/podcast/sgu/549')

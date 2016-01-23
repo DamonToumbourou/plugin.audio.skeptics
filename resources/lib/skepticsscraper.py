@@ -24,8 +24,6 @@ def get_latest_podcast(url):
         try:
             path = i.find_all('a')[2].get('href')
             path = BASE_URL + path
-            print 'path: '
-            print path
             
             if not path:
                 break 
@@ -33,12 +31,8 @@ def get_latest_podcast(url):
             label = i.find('a')
             label = i.get_text()
             label = re.search('Episode(.*)$', label).group(0)
-            print 'label: '
-            print label    
             
-            print 'img: '
             img = i.find('img').get('src')
-            print img
 
         except IndexError:
             continue
@@ -52,7 +46,6 @@ def get_latest_podcast(url):
         output.append(items)
 
     return output
-#get_latest_podcast('http://www.theskepticsguide.org/podcast/sgu')
 
 def get_podcast_content(url):
     soup = get_soup(url)
@@ -62,6 +55,9 @@ def get_podcast_content(url):
     
     img = content.find('div', {'class': 'podcast-image'})
     img = img.find('img').get('src')
+
+    path = content.find('div', {'class': 'podcast-actions noPrint'})
+    path = path.find('a').get('href')
 
     specific_content = soup.find_all('div', {'class': 'podcast-segment'})
 
@@ -77,6 +73,7 @@ def get_podcast_content(url):
     
     items = {
         'title': title,
+        'path': path,
         'img': img,
         'word': word,
         'quote': quote,
@@ -85,8 +82,6 @@ def get_podcast_content(url):
     output.append(items)
 
     return output
-#get_podcast_content('http://www.theskepticsguide.org/podcast/sgu/549')
-
 
 def get_news_items(url):
     soup = get_soup(url)
@@ -108,7 +103,27 @@ def get_news_items(url):
                 }
 
                 news_items.append(items)
-    print news_items            
 
     return news_items
-#get_news_items('http://www.theskepticsguide.org/podcast/sgu/549')
+
+def get_podcast_archive(url):
+    soup = get_soup(url)
+    content = soup.find_all('li', {'class': 'alt'})
+    
+    output = []
+    for i in content:
+        archive = i.find('a')['href']
+        if 'http' in archive:
+            label = i.find('div', {'class': 'podcasts-number'})
+            label = label.get_text()
+         
+            path = i.find('a')['href']
+
+            items = {
+                'label': label,
+                'path': path,
+            }
+
+            output.append(items)
+
+    return output

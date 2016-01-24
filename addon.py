@@ -1,8 +1,6 @@
 from xbmcswift2 import Plugin, xbmcgui
 from resources.lib import skepticsscraper
 import pyxbmct.addonwindow as pyxbmct
-import os
-import xbmcplugin
 
 plugin = Plugin()
 
@@ -81,7 +79,6 @@ def play_podcast(url):
     window.doModal()
     del window
 
-
 @plugin.route('/archive_podcast/')
 def archive_podcast():
     items = []
@@ -95,7 +92,6 @@ def archive_podcast():
         })
     
     return items
-
 
 @plugin.route('/podcast_5x5/')
 def podcast_5x5():
